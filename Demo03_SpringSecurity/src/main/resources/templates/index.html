@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h1>Welcome to Home Page</h1>
+<div sec:authorize="isAuthenticated()">
+    Logged in as: <span sec:authentication="name"></span>
+    Roles: <span sec:authentication="principal.authorities"></span>
+</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a th:href="@{/new}">Add New Product</a>
+</div>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Brand</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.brand}"></td>
+        <td th:text="${product.category}"></td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.description}"></td>
+        <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{/edit/{id}(id=${product.id})}">Edit</a>
+            <a th:href="@{/delete/{id}(id=${product.id})}">Delete</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
